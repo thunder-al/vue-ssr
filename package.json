@@ -4,14 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "dev": "vite build -w -m development -c vite-server.config.ts -- --start-server=true",
+    "build:server": "vite build -m production -c vite-server.config.ts",
+    "build": "npm run build:server"
   },
   "dependencies": {
+    "@hono/node-server": "^1.13.8",
+    "hono": "^4.6.20",
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@types/node": "^20",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.6.2",

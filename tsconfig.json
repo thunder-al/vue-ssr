@@ -1,7 +1,8 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    { "path": "./tsconfig.frontend.json" },
+    { "path": "./tsconfig.server.json" },
+    { "path": "./tsconfig.vite-config.json" }
   ]
 }
