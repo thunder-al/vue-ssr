@@ -1,8 +1,17 @@
 {
+  "compilerOptions": {
+    "target": "es2022"
+  },
   "files": [],
   "references": [
-    { "path": "./tsconfig.frontend.json" },
-    { "path": "./tsconfig.server.json" },
-    { "path": "./tsconfig.vite-config.json" }
+    {
+      "path": "./tsconfig.frontend.json"
+    },
+    {
+      "path": "./tsconfig.server.json"
+    },
+    {
+      "path": "./tsconfig.vite-config.json"
+    }
   ]
 }

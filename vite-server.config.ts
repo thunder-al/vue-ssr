@@ -1,9 +1,9 @@
-import { defineConfig, createLogger, Plugin, normalizePath } from 'vite'
+import {defineConfig, createLogger, Plugin, normalizePath} from 'vite'
 import Fsp from 'node:fs/promises'
-import { isBuiltin as isNodeBuiltin } from 'node:module'
-import { join as joinPath } from 'node:path'
-import { spawn as spawnProcess } from 'child_process'
-import { log } from 'node:console'
+import {isBuiltin as isNodeBuiltin} from 'node:module'
+import {join as joinPath} from 'node:path'
+import {spawn as spawnProcess} from 'child_process'
+import {log} from 'node:console'
 
 // Vite config for bundling server
 
@@ -22,7 +22,9 @@ const externalsState = {
   // List of packages from package.json (warning: phantom, modules should not be used)
   externalPackages: [] as Array<string>,
   // Optional list of external modules
-  externalRegexp: [] as Array<RegExp>,
+  externalRegexp: [
+    /^\.\/dist\/ssr\/entry-server\.js/,
+  ] as Array<RegExp>,
 }
 
 // extra args that can be passed to vite like: vite build -w -c ... -- --customArg1 --customArg2=value
@@ -39,6 +41,8 @@ export default defineConfig({
   publicDir: false,
 
   build: {
+    target: 'node20',
+    minify: false,
 
     // enabling sourcemaps for dev and prod
     // 1. this sourcemaps will not be accessible from user side
@@ -52,7 +56,7 @@ export default defineConfig({
       entry: 'src-server/index.ts',
       fileName: 'index',
       formats: ['es'],
-    }
+    },
   },
 
   plugins: [
@@ -148,10 +152,10 @@ function viteExternalsPlugin(): Plugin {
         }
 
         if (isExternal(id)) {
-          return { id, external: true }
+          return {id, external: true}
         }
-      }
-    }
+      },
+    },
   }
 }
 
@@ -193,7 +197,7 @@ function startServerPlugin(chunkNameToRun: string): Plugin {
     const args = [...nodeArgs, appPath, ...appArgs]
 
     // Start the server process
-    const proc = spawnProcess('node', args, { stdio: 'inherit' })
+    const proc = spawnProcess('node', args, {stdio: 'inherit'})
 
     let closed = false
 
@@ -298,7 +302,7 @@ function startServerPlugin(chunkNameToRun: string): Plugin {
           serverStartThrottleHandle = null
         }, throttleTime)
 
-      }
+      },
     },
   }
 }

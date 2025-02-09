@@ -1,16 +1,23 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import fastify from 'fastify'
+import fastifyMiddie from '@fastify/middie'
+import {createSSRMiddleware} from './ssr-middleware.ts'
 
-const app = new Hono()
-
-app.get('/', (c) => {
-    return c.text('Hello Hono!')
+const app = fastify({
+  logger: true,
+  disableRequestLogging: true,
 })
 
-const port = 3000
-console.log(`Server is running on http://localhost:${port}`)
+app.get('/api/hello', async (req, repl) => {
+  return {
+    hello: 'world',
+  }
+})
 
-serve({
-    fetch: app.fetch,
-    port
+app.register(fastifyMiddie)
+
+app.register(createSSRMiddleware())
+
+await app.listen({
+  port: 3000,
+  host: '0.0.0.0',
 })
