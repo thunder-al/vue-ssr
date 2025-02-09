@@ -4,7 +4,7 @@ import Path from 'path'
 import Url from 'url'
 import {renderToString, SSRContext} from 'vue/server-renderer'
 import Fsp from 'node:fs/promises'
-import {createSSRDataStorage, renderSSRDataStorage} from './ssr-data.ts'
+import {createSSRDataStorage, makeInternalReverseHttpCall, renderSSRDataStorage} from './ssr-data.ts'
 
 export async function prodSSRMiddleware(fastify: FastifyInstance) {
   const ssrManifest = JSON.parse(await Fsp.readFile('./dist/ssr/.vite/manifest.json', 'utf-8'))
@@ -30,7 +30,9 @@ export async function prodSSRMiddleware(fastify: FastifyInstance) {
 
     const {app: vueApp, ssrCtx: ssrAppCtx} = createApp()
 
-    const ctx: SSRContext = {dataStorage}
+    const internalHttp = (method: string, url: string, body: any) => makeInternalReverseHttpCall(fastify, method, url, body)
+
+    const ctx: SSRContext = {dataStorage, internalHttp}
     ssrAppCtx.provideSsrContext(ctx)
 
     const rendered = await renderToString(vueApp, ctx)
